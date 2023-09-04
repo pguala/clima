@@ -17,7 +17,7 @@ function init() {
       sessionStorage.setItem(key, JSON.stringify(position));
     }
     // Obtener datos de ubicación
-    var latitude, longitude; 
+    var latitude, longitude;
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
     addToSessionStorage("coords", {
@@ -32,6 +32,8 @@ function init() {
 var coords = sessionStorage.getItem("coords");
 var lat = JSON.parse(coords).latitude;
 var lon = JSON.parse(coords).longitude;
+var shortLat = JSON.stringify(lat).substring(0,6);
+var shortLon = JSON.stringify(lon).substring(0,6);
 
 var url =
   "http://www.7timer.info/bin/api.pl?lon=" +
@@ -136,18 +138,49 @@ function mostrarDatos() {
             return "Huracán ";
         }
       }
+      function direccionV(wind10mdirection) {
+        switch (wind10mdirection) {
+          case "N":
+            return "Norte ⬆️";
+          case "NE":
+            return "Noreste ↗️";
+          case "E":
+            return "Este ➡️";
+          case "SE":
+            return "Sureste ↘️";
+          case "S":
+            return "Sur ⬇️";
+          case "SW":
+            return "Suroeste ↙️";
+          case "W":
+            return "Oeste ⬅️";
+          case "NW":
+            return "Noroeste ↖️";
+        }
+      }
       function precipitaciones(prec_type) {
         switch (prec_type) {
           case "none":
-            return "☁️";
+            return "Seco 🌂";
           case "rain":
-            return "🌧️";
+            return "Lluvioso ☔";
           case "snow":
             return "🌨️";
           case "frzr":
             return "❄️";
           case "icep":
             return "🧊";
+        }
+      }
+      function icono(prec, nubo) {
+        if (!prec === "none") {
+          return '<div class="rainy"><div class="rainy__cloud"></div><div class="rainy__rain"></div></div>';
+        } else if (nubo >= 7) {
+          return '<div class="cloudy"></div>';
+        } else if (nubo >= 4) {
+          return '<div class="partly_cloudy"><div class="partly_cloudy__sun"></div><div class="partly_cloudy__cloud"></div></div>';
+        } else if (nubo <= 3) {
+          return '<div class="sunny"></div>';
         }
       }
       console.log(data);
@@ -158,23 +191,30 @@ function mostrarDatos() {
       var dato = data.dataseries[dia];
       var nubosidad = nubosidad(JSON.stringify(dato.cloudcover));
       var humedad = humedad(JSON.stringify(dato.rh2m));
-      var viento = velocidadV(JSON.stringify(dato.wind10m.speed));
+      var viento =
+        velocidadV(JSON.stringify(dato.wind10m.speed)) +
+        "al " +
+        direccionV(dato.wind10m.direction);
       var precipitaciones = precipitaciones(dato.prec_type);
       div.innerHTML +=
-        "<h4>Latitud: " +
-        lat +
+        "<h5>Latitud: " +
+        shortLat +
         ", Longitud: " +
-        lon +
-        `</h4>
-      <h5>Temperatura: ${dato.temp2m}°</h5>
-      <p>Nubosidad: ` +
+        shortLon +
+        icono(dato.prec_type, dato.cloudcover) + `</h5>
+      <p><b>Temperatura:</b> ${dato.temp2m}°</p>
+      <p><b>Nubosidad:</b> ` +
         nubosidad +
         `</p>
-      <p>Humedad: ` +
+      <p><b>Humedad:</b> ` +
         humedad +
         `</p>
-      <p>Viento: `+ viento +`${dato.wind10m.direction}</p>
-      <p>Precipitaciones: `+ precipitaciones +`</p>
+      <p><b>Viento:</b> ` +
+        viento +
+        `</p>
+      <p><b>Precipitaciones:</b> ` +
+        precipitaciones +
+        `</p>
     `;
     });
 }
