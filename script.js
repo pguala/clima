@@ -35,9 +35,9 @@ var lon = JSON.parse(coords).longitude;
 
 var url =
   "http://www.7timer.info/bin/api.pl?lon=" +
-  lat +
-  "&lat=" +
   lon +
+  "&lat=" +
+  lat +
   "&product=astro&unit=metric&output=json";
 
 function mostrarDatos() {
