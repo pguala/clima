@@ -25,15 +25,18 @@ function init() {
       longitude: longitude,
     });
   }
-  mostrarDatos();
+  setTimeout(mostrarDatos(), 5000);
+  //Mostrar coordenadas en footer
+  document.getElementById("footer").innerHTML +=
+    "<i><p id='footercoord'>Latitud: " + shortLat + "</i> 🌐 <i>Longitud: " + shortLon + "</p></i>";
 }
 
 // Obtener valores del sessionStorage
 var coords = sessionStorage.getItem("coords");
 var lat = JSON.parse(coords).latitude;
 var lon = JSON.parse(coords).longitude;
-var shortLat = JSON.stringify(lat).substring(0,6);
-var shortLon = JSON.stringify(lon).substring(0,6);
+var shortLat = JSON.stringify(lat).substring(0, 6);
+var shortLon = JSON.stringify(lon).substring(0, 6);
 
 var url =
   "http://www.7timer.info/bin/api.pl?lon=" +
@@ -197,11 +200,8 @@ function mostrarDatos() {
         direccionV(dato.wind10m.direction);
       var precipitaciones = precipitaciones(dato.prec_type);
       div.innerHTML +=
-        "<h5>Latitud: " +
-        shortLat +
-        ", Longitud: " +
-        shortLon +
-        icono(dato.prec_type, dato.cloudcover) + `</h5>
+        icono(dato.prec_type, dato.cloudcover) +
+        `</h5>
       <p><b>Temperatura:</b> ${dato.temp2m}°</p>
       <p><b>Nubosidad:</b> ` +
         nubosidad +
