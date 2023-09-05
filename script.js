@@ -25,7 +25,7 @@ function init() {
       longitude: longitude,
     });
   }
-  setTimeout(mostrarDatos(), 5000);
+  setTimeout(mostrarDatos(), 50000);
   //Mostrar coordenadas en footer
   document.getElementById("footer").innerHTML +=
     "<i><p id='footercoord'>Latitud: " + shortLat + "</i> 🌐 <i>Longitud: " + shortLon + "</p></i>";
