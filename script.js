@@ -1,11 +1,6 @@
 //  Ejecutar al cargar DOM
 document.addEventListener("DOMContentLoaded", init);
 
-// Función inicial
-function init() {
-  mostrarDatos();
-}
-
 // Obtener y guardar la ubicación
 function obtenerCoord() {
   navigator.geolocation.getCurrentPosition(success);
@@ -29,11 +24,38 @@ function obtenerCoord() {
       longitude: longitude,
     });
   }
-  //Mostrar coordenadas en footer
-  document.getElementById("footer").innerHTML +=
-    "<i><p id='footercoord'>Latitud: " + shortLat + "</i> 🌐 <i>Longitud: " + shortLon + "</p></i>";
+  if (!coords) {
+    document.getElementById("footer").innerHTML +=
+      "<i><p id='footercoord'>Debes permitir la ubicación</p></i>";
+  } else {
+    //Mostrar coordenadas en footer
+    document.getElementById("footer").innerHTML +=
+      "<i><p id='footercoord'>Latitud: " +
+      shortLat +
+      "</i> 🌐 <i>Longitud: " +
+      shortLon +
+      "</p></i>";
+  }
+  //Promise
+  return new Promise((resolve, reject) => {
+    if (coords) {
+      resolve(coords);
+    } else {
+      reject(new Error("Value not found"));
+    }
+  });
 }
 
+// Función inicial
+function init() {
+  obtenerCoord()
+    .then((x) => {
+      mostrarDatos(x);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 // Obtener valores del sessionStorage
 var coords = sessionStorage.getItem("coords");
 var lat = JSON.parse(coords).latitude;
@@ -56,8 +78,6 @@ function mostrarDatos() {
       return response.json();
     })
     .then((data) => {
-      obtenerCoord();
-
       function nubosidad(cloudcover) {
         switch (cloudcover) {
           case "1":
