@@ -3,7 +3,11 @@ document.addEventListener("DOMContentLoaded", init);
 
 // Función inicial
 function init() {
-  // Obtener y guardar la ubicación
+  mostrarDatos();
+}
+
+// Obtener y guardar la ubicación
+function obtenerCoord() {
   navigator.geolocation.getCurrentPosition(success);
   // Función para ejecutar al obtener la ubicación
   function success(position) {
@@ -25,7 +29,6 @@ function init() {
       longitude: longitude,
     });
   }
-  setTimeout(mostrarDatos(), 50000);
   //Mostrar coordenadas en footer
   document.getElementById("footer").innerHTML +=
     "<i><p id='footercoord'>Latitud: " + shortLat + "</i> 🌐 <i>Longitud: " + shortLon + "</p></i>";
@@ -53,6 +56,8 @@ function mostrarDatos() {
       return response.json();
     })
     .then((data) => {
+      obtenerCoord();
+
       function nubosidad(cloudcover) {
         switch (cloudcover) {
           case "1":
