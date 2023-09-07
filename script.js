@@ -1,9 +1,20 @@
 //  Ejecutar al cargar DOM
 document.addEventListener("DOMContentLoaded", init);
 
+// Función inicial
+function init() {
+  obtenerCoord()
+    .then((x) => {
+      mostrarDatos(x);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 // Obtener y guardar la ubicación
 function obtenerCoord() {
-  navigator.geolocation.getCurrentPosition(success);
+  navigator.geolocation.getCurrentPosition(success,error);
   // Función para ejecutar al obtener la ubicación
   function success(position) {
     // Añadir datos obtenidos a sessionStorage
@@ -23,11 +34,6 @@ function obtenerCoord() {
       latitude: latitude,
       longitude: longitude,
     });
-  }
-  if (!coords) {
-    document.getElementById("footer").innerHTML +=
-      "<i><p id='footercoord'>Debes permitir la ubicación</p></i>";
-  } else {
     //Mostrar coordenadas en footer
     document.getElementById("footer").innerHTML +=
       "<i><p id='footercoord'>Latitud: " +
@@ -36,26 +42,20 @@ function obtenerCoord() {
       shortLon +
       "</p></i>";
   }
+  function error(){
+    document.getElementById("footer").innerHTML +=
+      "<i><p id='footercoord'>Debes permitir la ubicación</p></i>";
+  }
   //Promise
   return new Promise((resolve, reject) => {
     if (coords) {
       resolve(coords);
     } else {
-      reject(new Error("Value not found"));
+      reject(new Error("Valor no encontrado"));
     }
   });
 }
-
-// Función inicial
-function init() {
-  obtenerCoord()
-    .then((x) => {
-      mostrarDatos(x);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
+ 
 // Obtener valores del sessionStorage
 var coords = sessionStorage.getItem("coords");
 var lat = JSON.parse(coords).latitude;
