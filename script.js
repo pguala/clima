@@ -64,7 +64,7 @@ var shortLat = JSON.stringify(lat).substring(0, 6);
 var shortLon = JSON.stringify(lon).substring(0, 6);
 
 var url =
-  "http://www.7timer.info/bin/api.pl?lon=" +
+  "https://www.7timer.info/bin/api.pl?lon=" +
   lon +
   "&lat=" +
   lat +
