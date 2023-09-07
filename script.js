@@ -41,6 +41,7 @@ function obtenerCoord() {
       "</i> 🌐 <i>Longitud: " +
       shortLon +
       "</p></i>";
+    window.location.reload();
   }
   function error(){
     document.getElementById("footer").innerHTML +=
@@ -71,9 +72,6 @@ var url =
   "&product=astro&unit=metric&output=json";
 
 function mostrarDatos() {
-  if (coords === null){
-    obtenerCoord()
-  };
   var div = document.getElementById("mostrar");
   div.innerHTML = "";
   fetch(url)
