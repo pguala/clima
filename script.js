@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", init);
 function init() {
   obtenerCoord()
     .then((x) => {
+      window.location.reload();
       mostrarDatos(x);
     })
     .catch((error) => {
@@ -41,7 +42,6 @@ function obtenerCoord() {
       "</i> 🌐 <i>Longitud: " +
       shortLon +
       "</p></i>";
-    window.location.reload();
   }
   function error(){
     document.getElementById("footer").innerHTML +=
