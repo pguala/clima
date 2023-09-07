@@ -72,7 +72,7 @@ var url =
 
 function mostrarDatos() {
   if (coords === null){
-    window.location.reload();
+    obtenerCoord()
   };
   var div = document.getElementById("mostrar");
   div.innerHTML = "";
