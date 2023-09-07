@@ -58,6 +58,9 @@ function obtenerCoord() {
  
 // Obtener valores del sessionStorage
 var coords = sessionStorage.getItem("coords");
+if (coords === null){
+  window.location.reload();
+};
 var lat = JSON.parse(coords).latitude;
 var lon = JSON.parse(coords).longitude;
 var shortLat = JSON.stringify(lat).substring(0, 6);
