@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", init);
 function init() {
   obtenerCoord()
     .then((x) => {
-      window.location.reload();
       mostrarDatos(x);
     })
     .catch((error) => {
