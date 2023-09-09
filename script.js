@@ -197,7 +197,7 @@ function mostrarDatos() {
       <p><b>Nubosidad:</b> Entre ` +
         nubosidad +
         `</p>
-      <p><b>Humedad:</b> ` +
+      <p><b>Humedad:</b> Entre ` +
         humedad +
         `</p>
       <p><b>Viento:</b> ` +
