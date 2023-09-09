@@ -37,11 +37,11 @@ body {
 }
 
 #mostrar {
-	width: 25%;
+	width: 100%;
 	height: auto;
 }
 
-#footercoord {
+#footer {
 	font-size: 11pt;
 }
 

@@ -1,147 +1,117 @@
-//  Ejecutar al cargar DOM
-document.addEventListener("DOMContentLoaded", init);
+// Accionar en evento DOMContentLoaded 
+document.addEventListener("DOMContentLoaded", obtenerUbicacion);
 
-// Función inicial
-function init() {
-  obtenerCoord()
-    .then((x) => {
-      mostrarDatos(x);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+const div = document.getElementById("mostrar");
+const pie = document.getElementById("footer");
+//Placeholder para los valores
+var coord = "";
+var url = "";
+
+//Obtener ubicación
+function obtenerUbicacion() {
+  // Obtener geolocalización
+  const geolocation = navigator.geolocation;
+  // Si geolocalización es soportada 
+  if (geolocation) {
+    // Pedir accesso a geolocalización
+    geolocation.getCurrentPosition(
+      // Para callback exitoso
+      (position) => {
+        // Obtener latitud y longitud y crear un string
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        url += "https://www.7timer.info/bin/api.pl?lon=" + longitude + "&lat=" + latitude + "&product=astro&unit=metric&output=json";
+        // Desplegar coordenadas acortadas en cuerpo
+        var shortLat = JSON.stringify(latitude).substring(0, 6);
+        var shortLon = JSON.stringify(longitude).substring(0, 6);
+        coord += `<i>Latitud: ${shortLat}</i> 🌐 <i>Longitud: ${shortLon}</i>`;
+        pie.innerHTML = coord;
+        mostrarDatos();
+      },
+      // Para error en callback
+      (error) => {
+        console.log(`Error: ${error.message}`);
+      }
+    );
+  } else {
+    alert("Geolocalización no soportada");
+  }
 }
 
-// Obtener y guardar la ubicación
-function obtenerCoord() {
-  navigator.geolocation.getCurrentPosition(success,error);
-  // Función para ejecutar al obtener la ubicación
-  function success(position) {
-    // Añadir datos obtenidos a sessionStorage
-    function addToSessionStorage(key, value) {
-      var position = {
-        latitude: value.latitude,
-        longitude: value.longitude,
-      };
-      sessionStorage.clear();
-      sessionStorage.setItem(key, JSON.stringify(position));
-    }
-    // Obtener datos de ubicación
-    var latitude, longitude;
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
-    addToSessionStorage("coords", {
-      latitude: latitude,
-      longitude: longitude,
-    });
-    //Mostrar coordenadas en footer
-    document.getElementById("footer").innerHTML +=
-      "<i><p id='footercoord'>Latitud: " +
-      shortLat +
-      "</i> 🌐 <i>Longitud: " +
-      shortLon +
-      "</p></i>";
-  }
-  function error(){
-    document.getElementById("footer").innerHTML +=
-      "<i><p id='footercoord'>Debes permitir la ubicación</p></i>";
-  }
-  //Promise
-  return new Promise((resolve, reject) => {
-    if (coords) {
-      resolve(coords);
-    } else {
-      reject(new Error("Valor no encontrado"));
-    }
-  });
-}
- 
-// Obtener valores del sessionStorage
-var coords = sessionStorage.getItem("coords");
-var lat = JSON.parse(coords).latitude;
-var lon = JSON.parse(coords).longitude;
-var shortLat = JSON.stringify(lat).substring(0, 6);
-var shortLon = JSON.stringify(lon).substring(0, 6);
-
-var url =
-  "https://www.7timer.info/bin/api.pl?lon=" +
-  lon +
-  "&lat=" +
-  lat +
-  "&product=astro&unit=metric&output=json";
-
+//Funciones para mostrar contenido
+//Fetch
 function mostrarDatos() {
-  var div = document.getElementById("mostrar");
   div.innerHTML = "";
   fetch(url)
     .then((response) => {
       return response.json();
     })
     .then((data) => {
+      //Funciones para reemplazar valores de la API con texto
       function nubosidad(cloudcover) {
         switch (cloudcover) {
           case "1":
-            return "0% - 6%";
+            return "0% y 6%";
           case "2":
-            return "6% - 19%";
+            return "6% y 19%";
           case "3":
-            return "19% - 31%";
+            return "19% y 31%";
           case "4":
-            return "31% - 44%";
+            return "31% y 44%";
           case "5":
-            return "44% - 56%";
+            return "44% y 56%";
           case "6":
-            return "56% - 69%";
+            return "56% y 69%";
           case "7":
-            return "69% - 81%";
+            return "69% y 81%";
           case "8":
-            return "81% - 94%";
+            return "81% y 94%";
           case "9":
-            return "94% - 100%";
+            return "94% y 100%";
         }
       }
       function humedad(rh2m) {
         switch (rh2m) {
           case "-4":
-            return "0% - 5%";
+            return "0% y 5%";
           case "-3":
-            return "5% - 10%";
+            return "5% y 10%";
           case "-2":
-            return "10% - 15%";
+            return "10% y 15%";
           case "-1":
-            return "15% - 20%";
+            return "15% y 20%";
           case "0":
-            return "20% - 25%";
+            return "20% y 25%";
           case "1":
-            return "25% - 30%";
+            return "25% y 30%";
           case "2":
-            return "30% - 35%";
+            return "30% y 35%";
           case "3":
-            return "35% - 40%";
+            return "35% y 40%";
           case "4":
-            return "40% - 45%";
+            return "40% y 45%";
           case "5":
-            return "45% - 50%";
+            return "45% y 50%";
           case "6":
-            return "50% - 55%";
+            return "50% y 55%";
           case "7":
-            return "55% - 60%";
+            return "55% y 60%";
           case "8":
-            return "60% - 65%";
+            return "60% y 65%";
           case "9":
-            return "65% - 70%";
+            return "65% y 70%";
           case "10":
-            return "70% - 75%";
+            return "70% y 75%";
           case "11":
-            return "75% - 80%";
+            return "75% y 80%";
           case "12":
-            return "80% - 85%";
+            return "80% y 85%";
           case "13":
-            return "85% - 90%";
+            return "85% y 90%";
           case "14":
-            return "90% - 95%";
+            return "90% y 95%";
           case "15":
-            return "95% - 99%";
+            return "95% y 99%";
           case "16":
             return "100%";
         }
@@ -200,35 +170,31 @@ function mostrarDatos() {
             return "🧊";
         }
       }
-      function icono(prec, nubo) {
+      // Insertar iconos generados con clases CSS
+      function icono(prec, nubosidad) {
         if (!prec === "none") {
           return '<div class="rainy"><div class="rainy__cloud"></div><div class="rainy__rain"></div></div>';
-        } else if (nubo >= 7) {
+        } else if (nubosidad >= 7) {
           return '<div class="cloudy"></div>';
-        } else if (nubo >= 4) {
+        } else if (nubosidad >= 4) {
           return '<div class="partly_cloudy"><div class="partly_cloudy__sun"></div><div class="partly_cloudy__cloud"></div></div>';
-        } else if (nubo <= 3) {
+        } else if (nubosidad <= 3) {
           return '<div class="sunny"></div>';
         }
       }
+      //Generar variables para los datos a mostrar
+      var datadia = data.dataseries[0];
+      var nubosidad = nubosidad(JSON.stringify(datadia.cloudcover));
+      var humedad = humedad(JSON.stringify(datadia.rh2m));
+      var viento = velocidadV(JSON.stringify(datadia.wind10m.speed))+"al "+direccionV(datadia.wind10m.direction);
+      var precipitaciones = precipitaciones(datadia.prec_type);
       console.log(data);
-      var dia = 0;
-      //document.getElementById("sigdia").addEventListener("click", function () {
-      //  dia += 1;
-      //});
-      var dato = data.dataseries[dia];
-      var nubosidad = nubosidad(JSON.stringify(dato.cloudcover));
-      var humedad = humedad(JSON.stringify(dato.rh2m));
-      var viento =
-        velocidadV(JSON.stringify(dato.wind10m.speed)) +
-        "al " +
-        direccionV(dato.wind10m.direction);
-      var precipitaciones = precipitaciones(dato.prec_type);
+      //Mostrar datos en el HTML
       div.innerHTML +=
-        icono(dato.prec_type, dato.cloudcover) +
+        icono(datadia.prec_type, datadia.cloudcover) +
         `</h5>
-      <p><b>Temperatura:</b> ${dato.temp2m}°</p>
-      <p><b>Nubosidad:</b> ` +
+      <p><b>Temperatura:</b> ${datadia.temp2m}°</p>
+      <p><b>Nubosidad:</b> Entre ` +
         nubosidad +
         `</p>
       <p><b>Humedad:</b> ` +
